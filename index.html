@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>元胞自动机可视化</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🧬 元胞自动机可视化</h1>
+        <p class="subtitle">Cellular Automaton Explorer</p>
+    </header>
+
+    <main>
+        <!-- 控制面板 -->
+        <aside class="controls">
+            <section class="panel">
+                <h2>画布设置</h2>
+                <div class="control-row">
+                    <label for="cols">列数</label>
+                    <input type="number" id="cols" min="5" max="200" value="60">
+                </div>
+                <div class="control-row">
+                    <label for="rows">行数</label>
+                    <input type="number" id="rows" min="5" max="150" value="40">
+                </div>
+                <button id="applySize" class="btn btn-primary">应用尺寸</button>
+            </section>
+
+            <section class="panel">
+                <h2>规则选择</h2>
+                <select id="ruleSelect">
+                    <option value="gameoflife">Conway's Game of Life</option>
+                    <option value="seeds">Seeds</option>
+                    <option value="highlife">HighLife</option>
+                    <option value="2x2">2×2</option>
+                    <option value="daynight">Day & Night</option>
+                    <option value="wolfram30">Wolfram Rule 30</option>
+                    <option value="wolfram110">Wolfram Rule 110</option>
+                </select>
+                <div class="rule-desc" id="ruleDesc"></div>
+            </section>
+
+            <section class="panel">
+                <h2>播放控制</h2>
+                <div class="control-buttons">
+                    <button id="playBtn" class="btn btn-success">▶ 播放</button>
+                    <button id="pauseBtn" class="btn btn-warning">⏸ 暂停</button>
+                    <button id="stepBtn" class="btn btn-info">⏭ 单步</button>
+                </div>
+                <div class="control-row">
+                    <label for="speedRange">速度</label>
+                    <input type="range" id="speedRange" min="10" max="500" value="100">
+                </div>
+                <div class="speed-value"><span id="speedValue">100</span> ms/帧</div>
+            </section>
+
+            <section class="panel">
+                <h2>操作</h2>
+                <div class="control-buttons">
+                    <button id="randomBtn" class="btn">🎲 随机</button>
+                    <button id="clearBtn" class="btn btn-danger">🗑 清空</button>
+                </div>
+                <div class="control-buttons">
+                    <button id="gliderBtn" class="btn">✈ 滑翔机</button>
+                    <button id="pulsarBtn" class="btn">⭐ 脉冲星</button>
+                </div>
+                <div class="control-buttons">
+                    <button id="gosperBtn" class="btn">🚀 高斯帕枪</button>
+                </div>
+            </section>
+
+            <section class="panel">
+                <h2>颜色设置</h2>
+                <div class="control-row">
+                    <label for="aliveColor">活细胞</label>
+                    <input type="color" id="aliveColor" value="#00d4aa">
+                </div>
+                <div class="control-row">
+                    <label for="deadColor">死细胞</label>
+                    <input type="color" id="deadColor" value="#1a1a2e">
+                </div>
+                <div class="control-row">
+                    <label for="gridColor">网格线</label>
+                    <input type="color" id="gridColor" value="#2a2a4a">
+                </div>
+                <div class="control-row checkbox-row">
+                    <label>
+                        <input type="checkbox" id="showGrid" checked>
+                        显示网格
+                    </label>
+                </div>
+                <div class="control-row checkbox-row">
+                    <label>
+                        <input type="checkbox" id="rainbowMode">
+                        彩虹模式
+                    </label>
+                </div>
+            </section>
+
+            <section class="panel stats">
+                <h2>统计</h2>
+                <div class="stat-item">
+                    <span class="stat-label">代数</span>
+                    <span class="stat-value" id="generation">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">活细胞</span>
+                    <span class="stat-value" id="aliveCount">0</span>
+                </div>
+            </section>
+        </aside>
+
+        <!-- 画布区域 -->
+        <section class="canvas-container">
+            <canvas id="automatonCanvas"></canvas>
+            <div class="canvas-hint">💡 点击或拖拽画布可以手动绘制细胞</div>
+        </section>
+    </main>
+
+    <footer>
+        <p>基于 Conway's Game of Life 等经典元胞自动机规则 · 纯前端实现</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
