@@ -242,62 +242,45 @@
         return count;
     }
 
-    // Wolfram 一维元胞自动机
+    // Wolfram 一维元胞自动机 - 滚动窗口模式
     function computeWolframRow(grid, rule, rows, cols) {
         const ruleBits = rule.ruleNumber.toString(2).padStart(8, '0').split('').reverse();
         const next = new Array(rows);
+
+        // 初始化 next 数组
         for (let r = 0; r < rows; r++) {
             next[r] = new Array(cols).fill(0);
         }
 
-        // 找到最后一行活细胞的位置，从那里开始向下迭代
-        let startRow = -1;
-        for (let r = rows - 1; r >= 0; r--) {
+        // 检查是否已有任何活细胞
+        let hasAlive = false;
+        for (let r = 0; r < rows; r++) {
             if (grid[r].some(v => v === 1)) {
-                startRow = r;
+                hasAlive = true;
                 break;
             }
         }
 
-        if (startRow < 0) {
+        if (!hasAlive) {
             return next;
         }
 
-        // 复制 startRow 以上的内容
-        for (let r = 0; r <= startRow; r++) {
+        // 滚动窗口：将整个网格向上移动一行
+        // next[r] = grid[r+1]，最后一行用规则计算
+        for (let r = 0; r < rows - 1; r++) {
             for (let c = 0; c < cols; c++) {
-                next[r][c] = grid[r][c];
+                next[r][c] = grid[r + 1][c];
             }
         }
 
-        // 从 startRow 开始向下迭代
-        for (let r = startRow + 1; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-                const left = grid[r - 1][(c - 1 + cols) % cols];
-                const center = grid[r - 1][c];
-                const right = grid[r - 1][(c + 1) % cols];
-                const pattern = left * 4 + center * 2 + right;
-                next[r][c] = parseInt(ruleBits[pattern]);
-            }
-        }
-
-        // 也更新顶部（用于连续迭代）
-        // 将整个数组向上移动一行，最后一行用新计算的值
-        // 重新计算整个网格
-        for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-                next[r][c] = grid[r][c];
-            }
-        }
-        // 保留第一行不变，从第二行开始重新计算
-        for (let r = 1; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-                const left = next[r - 1][(c - 1 + cols) % cols];
-                const center = next[r - 1][c];
-                const right = next[r - 1][(c + 1) % cols];
-                const pattern = left * 4 + center * 2 + right;
-                next[r][c] = parseInt(ruleBits[pattern]);
-            }
+        // 用规则计算新的最后一行（基于原网格最后一行）
+        const lastRow = grid[rows - 1];
+        for (let c = 0; c < cols; c++) {
+            const left = lastRow[(c - 1 + cols) % cols];
+            const center = lastRow[c];
+            const right = lastRow[(c + 1) % cols];
+            const pattern = left * 4 + center * 2 + right;
+            next[rows - 1][c] = parseInt(ruleBits[pattern]);
         }
 
         return next;
@@ -328,6 +311,17 @@
             CONFIG.rule = e.target.value;
             updateRuleDesc();
             CONFIG.generation = 0;
+
+            // Wolfram 规则：如果网格为空，在第一行中心生成种子
+            if (CONFIG.rule.startsWith('wolfram')) {
+                let hasAlive = false;
+                for (let r = 0; r < CONFIG.rows; r++) {
+                    if (CONFIG.grid[r].some(v => v === 1)) { hasAlive = true; break; }
+                }
+                if (!hasAlive) {
+                    CONFIG.grid[0][Math.floor(CONFIG.cols / 2)] = 1;
+                }
+            }
         });
 
         playBtn.addEventListener('click', play);
