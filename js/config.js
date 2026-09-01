@@ -18,6 +18,8 @@
         speed: 100,          // 毫秒
         lastUpdate: 0,
         rule: 'gameoflife',
+        // 统计
+        aliveHistory: [],    // 每代活细胞数历史（环形，保留所有）
         // 颜色设置
         aliveColor: '#00d4aa',
         deadColor: '#1a1a2e',
@@ -55,6 +57,8 @@
         rainbowModeCheckbox: null,
         generationEl: null,
         aliveCountEl: null,
+        avgRecentEl: null,
+        avgAllEl: null,
     };
 
     function initDOM() {
@@ -82,6 +86,8 @@
         DOM.rainbowModeCheckbox = document.getElementById('rainbowMode');
         DOM.generationEl = document.getElementById('generation');
         DOM.aliveCountEl = document.getElementById('aliveCount');
+        DOM.avgRecentEl = document.getElementById('avgRecent');
+        DOM.avgAllEl = document.getElementById('avgAll');
     }
 
     global.AppConfig = { CONFIG, DOM, initDOM };

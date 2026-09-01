@@ -20,6 +20,7 @@
         }
         CONFIG.neighborCount = computeNeighborCounts(CONFIG.grid);
         CONFIG.generation = 0;
+        CONFIG.aliveHistory = [];
         global.AppRenderer.resizeCanvas();
         updateStats();
     }
@@ -34,6 +35,7 @@
             }
         }
         CONFIG.neighborCount = computeNeighborCounts(CONFIG.grid);
+        CONFIG.aliveHistory = [];
     }
 
     /**
@@ -46,6 +48,7 @@
             }
         }
         CONFIG.neighborCount = computeNeighborCounts(CONFIG.grid);
+        CONFIG.aliveHistory = [];
     }
 
     /**
@@ -65,7 +68,7 @@
     }
 
     /**
-     * 统计活细胞数并更新 UI
+     * 统计活细胞数并更新 UI，返回活细胞数
      */
     function updateStats() {
         let count = 0;
@@ -76,6 +79,24 @@
         }
         DOM.generationEl.textContent = CONFIG.generation;
         DOM.aliveCountEl.textContent = count;
+        DOM.avgRecentEl.textContent = calcAvgRecent(CONFIG.aliveHistory);
+        DOM.avgAllEl.textContent = calcAvgAll(CONFIG.aliveHistory);
+        return count;
+    }
+
+    /** 最近 50 代平均（不足 50 代则取全部） */
+    function calcAvgRecent(history) {
+        if (history.length === 0) return '—';
+        const recent = history.slice(-50);
+        const sum = recent.reduce((a, b) => a + b, 0);
+        return (sum / recent.length).toFixed(1);
+    }
+
+    /** 整体平均 */
+    function calcAvgAll(history) {
+        if (history.length === 0) return '—';
+        const sum = history.reduce((a, b) => a + b, 0);
+        return (sum / history.length).toFixed(1);
     }
 
     /**
@@ -94,7 +115,8 @@
         CONFIG.grid = computeNextGeneration(CONFIG.grid, rule);
         CONFIG.neighborCount = computeNeighborCounts(CONFIG.grid);
         CONFIG.generation++;
-        updateStats();
+        const count = updateStats();
+        CONFIG.aliveHistory.push(count);
     }
 
     /**
