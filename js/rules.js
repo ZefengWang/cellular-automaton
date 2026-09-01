@@ -37,6 +37,24 @@
             survive: [3, 4, 7, 8],
             birth: [3, 6, 7, 8],
         },
+        maze: {
+            name: 'Maze',
+            desc: '迷宫规则。活细胞邻居 1~5 个存活，死细胞恰好 3 个邻居出生。会生长出蜿蜒的迷宫结构。',
+            survive: [1, 2, 3, 4, 5],
+            birth: [3],
+        },
+        assimilation: {
+            name: 'Assimilation',
+            desc: '同化规则。出生条件较宽松（3~5 邻居），存活条件也宽松（4~7 邻居），活细胞会不断扩张并填充空间。',
+            survive: [4, 5, 6, 7],
+            birth: [3, 4, 5],
+        },
+        replicator: {
+            name: 'Replicator',
+            desc: '复制规则。奇偶邻居同时满足出生和存活，任何初始图案都会不断复制自身。',
+            survive: [1, 3, 5, 7],
+            birth: [1, 3, 5, 7],
+        },
         wolfram30: {
             name: 'Wolfram Rule 30',
             desc: '一维元胞自动机。Rule 30 能产生混沌图案，左邻居为1时：010→1, 011→1, 100→1, 101→1。',
