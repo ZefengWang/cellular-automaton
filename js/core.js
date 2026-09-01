@@ -5,7 +5,7 @@
     'use strict';
 
     const { CONFIG, DOM } = global.AppConfig;
-    const { RULES, computeNextGeneration } = global.AppRules;
+    const { RULES, computeNextGeneration, computeNeighborCounts } = global.AppRules;
     const { render } = global.AppRenderer;
 
     /**
@@ -18,6 +18,7 @@
         for (let r = 0; r < CONFIG.rows; r++) {
             CONFIG.grid[r] = new Array(CONFIG.cols).fill(0);
         }
+        CONFIG.neighborCount = computeNeighborCounts(CONFIG.grid);
         CONFIG.generation = 0;
         global.AppRenderer.resizeCanvas();
         updateStats();
@@ -32,6 +33,7 @@
                 CONFIG.grid[r][c] = Math.random() < 0.3 ? 1 : 0;
             }
         }
+        CONFIG.neighborCount = computeNeighborCounts(CONFIG.grid);
     }
 
     /**
@@ -43,6 +45,7 @@
                 CONFIG.grid[r][c] = 0;
             }
         }
+        CONFIG.neighborCount = computeNeighborCounts(CONFIG.grid);
     }
 
     /**
@@ -58,6 +61,7 @@
                 }
             }
         }
+        CONFIG.neighborCount = computeNeighborCounts(CONFIG.grid);
     }
 
     /**
@@ -88,6 +92,7 @@
     function step() {
         const rule = RULES[CONFIG.rule];
         CONFIG.grid = computeNextGeneration(CONFIG.grid, rule);
+        CONFIG.neighborCount = computeNeighborCounts(CONFIG.grid);
         CONFIG.generation++;
         updateStats();
     }

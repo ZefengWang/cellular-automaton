@@ -52,7 +52,7 @@
     };
 
     /**
-     * 统计环形边界下的邻居数量
+     * 统计环形边界下的邻居数量（单个细胞）
      */
     function countNeighbors(grid, r, c, rows, cols) {
         let count = 0;
@@ -65,6 +65,23 @@
             }
         }
         return count;
+    }
+
+    /**
+     * 计算整个网格每个位置的邻居数量
+     * 返回一个同样大小的二维数组，值为 0~8
+     */
+    function computeNeighborCounts(grid) {
+        const rows = grid.length;
+        const cols = grid[0].length;
+        const counts = new Array(rows);
+        for (let r = 0; r < rows; r++) {
+            counts[r] = new Array(cols);
+            for (let c = 0; c < cols; c++) {
+                counts[r][c] = countNeighbors(grid, r, c, rows, cols);
+            }
+        }
+        return counts;
     }
 
     /**
@@ -134,5 +151,5 @@
         return next;
     }
 
-    global.AppRules = { RULES, computeNextGeneration };
+    global.AppRules = { RULES, computeNextGeneration, computeNeighborCounts };
 })(window);

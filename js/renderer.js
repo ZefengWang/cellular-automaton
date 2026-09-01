@@ -27,7 +27,7 @@
      */
     function render() {
         const ctx = DOM.ctx;
-        const { cols, rows, cellSize, grid, aliveColor, deadColor, gridColor, showGrid, rainbowMode, generation } = CONFIG;
+        const { cols, rows, cellSize, grid, neighborCount, aliveColor, deadColor, gridColor, showGrid, rainbowMode } = CONFIG;
 
         // 清空画布
         ctx.fillStyle = deadColor;
@@ -37,9 +37,15 @@
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 if (grid[r][c] === 1) {
-                    if (rainbowMode) {
-                        const hue = (r * cols + c + generation * 10) % 360;
-                        ctx.fillStyle = `hsl(${hue}, 80%, 55%)`;
+                    if (rainbowMode && neighborCount) {
+                        // 根据周围邻居数量决定颜色：
+                        // 0 邻居 = 冷蓝（孤立）→ 8 邻居 = 暖红（密集）
+                        const n = neighborCount[r][c];
+                        // 色相 220°(蓝) → 0°(红)，邻居越多越暖
+                        const hue = 220 - (n / 8) * 220;
+                        // 亮度：邻居越多越亮
+                        const lightness = 45 + (n / 8) * 25;
+                        ctx.fillStyle = `hsl(${hue.toFixed(0)}, 85%, ${lightness.toFixed(0)}%)`;
                     } else {
                         ctx.fillStyle = aliveColor;
                     }

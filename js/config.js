@@ -9,6 +9,7 @@
     const CONFIG = {
         cellSize: 12,
         grid: null,          // 二维数组存储细胞状态
+        neighborCount: null, // 每个活细胞的邻居数量（用于彩虹色渲染）
         cols: 60,
         rows: 40,
         generation: 0,

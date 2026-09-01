@@ -52,7 +52,10 @@
     }
 
     function stopDrawing() {
+        if (!CONFIG.isDrawing) return;
         CONFIG.isDrawing = false;
+        // 拖拽结束后统一重算邻居数，避免每帧都全量计算
+        CONFIG.neighborCount = global.AppRules.computeNeighborCounts(CONFIG.grid);
     }
 
     global.AppPainter = { startDrawing, draw, stopDrawing, getTouchPos };
