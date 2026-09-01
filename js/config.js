@@ -59,6 +59,7 @@
         aliveCountEl: null,
         avgRecentEl: null,
         avgAllEl: null,
+        densityEl: null,
     };
 
     function initDOM() {
@@ -88,6 +89,7 @@
         DOM.aliveCountEl = document.getElementById('aliveCount');
         DOM.avgRecentEl = document.getElementById('avgRecent');
         DOM.avgAllEl = document.getElementById('avgAll');
+        DOM.densityEl = document.getElementById('density');
     }
 
     global.AppConfig = { CONFIG, DOM, initDOM };

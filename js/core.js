@@ -81,6 +81,8 @@
         DOM.aliveCountEl.textContent = count;
         DOM.avgRecentEl.textContent = calcAvgRecent(CONFIG.aliveHistory);
         DOM.avgAllEl.textContent = calcAvgAll(CONFIG.aliveHistory);
+        const total = CONFIG.rows * CONFIG.cols;
+        DOM.densityEl.textContent = ((count / total) * 100).toFixed(1) + '%';
         return count;
     }
 
