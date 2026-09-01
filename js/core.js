@@ -117,8 +117,13 @@
         CONFIG.grid = computeNextGeneration(CONFIG.grid, rule);
         CONFIG.neighborCount = computeNeighborCounts(CONFIG.grid);
         CONFIG.generation++;
-        const count = updateStats();
+        // 先把当前代活细胞数压入 history，再调 updateStats 计算均值
+        let count = 0;
+        for (let r = 0; r < CONFIG.rows; r++)
+            for (let c = 0; c < CONFIG.cols; c++)
+                if (CONFIG.grid[r][c] === 1) count++;
         CONFIG.aliveHistory.push(count);
+        updateStats();
     }
 
     /**

@@ -30,12 +30,14 @@
             CONFIG.rule = e.target.value;
             updateRuleDesc();
             CONFIG.generation = 0;
+            CONFIG.aliveHistory = [];
 
             // Wolfram 规则：空网格时在第一行中心生成种子
             if (CONFIG.rule.startsWith('wolfram') && !hasAliveCells()) {
                 CONFIG.grid[0][Math.floor(CONFIG.cols / 2)] = 1;
                 CONFIG.neighborCount = global.AppRules.computeNeighborCounts(CONFIG.grid);
             }
+            updateStats();
         });
 
         // —— 播放控制 ——
